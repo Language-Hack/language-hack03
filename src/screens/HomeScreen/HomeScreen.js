@@ -3,7 +3,7 @@ import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View } from 'rea
 import styles from './styles';
 import { firebase } from '../../firebase/config'
 
-export default function HomeScreen(props) {
+export default function HomeScreen(props, navigation) {
 
     const [entityText, setEntityText] = useState('')
     const [entities, setEntities] = useState([])
@@ -51,6 +51,15 @@ export default function HomeScreen(props) {
         }
     }
 
+    const onLogoutPress = () =>{
+        firebase.auth().signOut().then((response) => {
+            navigation.navigate('LoginScreen')
+        })
+        .catch(error => {
+            alert(error)
+        });
+    }
+
     const renderEntity = ({item, index}) => {
         return (
             <View style={styles.entityContainer}>
@@ -75,6 +84,9 @@ export default function HomeScreen(props) {
                 />
                 <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
                     <Text style={styles.buttonText}>Add</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={onLogoutPress}>
+                    <Text style={styles.buttonText}>logout</Text>
                 </TouchableOpacity>
             </View>
             { entities && (
